@@ -1,0 +1,14 @@
+{
+  "projectNumber": "05",
+  "title": "Assistant RE2020",
+  "category": "IA générative et RAG",
+  "stack1": "Python",
+  "stack2": "RAG hybride",
+  "stack3": "API Anthropic",
+  "metricLabel": "Rappel@10, recherche hybride",
+  "metricValue": "0,875",
+  "metric2Label": "Passages officiels indexés",
+  "metric2Value": "694",
+  "figureCaption": "BM25, vectoriel et fusion RRF sur 32 questions de référence",
+  "accent": "#FF5C8F"
+}
