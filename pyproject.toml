@@ -1,0 +1,40 @@
+[project]
+name = "re2020"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "yzasmin", email = "saoudyasmina.ys@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "anthropic>=1.7.0",
+    "beautifulsoup4>=4.15.0",
+    "fastembed>=0.8.0",
+    "matplotlib>=3.10.9",
+    "pymupdf>=1.28.2",
+    "python-dotenv>=1.2.3",
+    "qdrant-client>=1.19.1",
+    "rank-bm25>=0.2.2",
+    "requests>=2.34.2",
+    "snowballstemmer>=3.1.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.8",
+]
+
+[tool.ruff]
+line-length = 130
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

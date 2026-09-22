@@ -1,0 +1,813 @@
+{
+  "date": "2026-09-22",
+  "passages_indexes": 694,
+  "questions_evaluees": 32,
+  "questions_hors_perimetre": 5,
+  "modele_embeddings": "Xenova/multilingual-e5-small",
+  "fusion": "Reciprocal Rank Fusion, k=60, 50 candidats par moteur",
+  "metriques": {
+    "bm25": {
+      "recall@1": 0.2656,
+      "recall@3": 0.5938,
+      "recall@5": 0.75,
+      "recall@10": 0.8281,
+      "mrr": 0.4724,
+      "ndcg@10": 0.552,
+      "latence_ms_mediane": 7.3
+    },
+    "vector": {
+      "recall@1": 0.2812,
+      "recall@3": 0.4219,
+      "recall@5": 0.4531,
+      "recall@10": 0.625,
+      "mrr": 0.3756,
+      "ndcg@10": 0.4304,
+      "latence_ms_mediane": 43.1
+    },
+    "hybrid": {
+      "recall@1": 0.3594,
+      "recall@3": 0.5781,
+      "recall@5": 0.75,
+      "recall@10": 0.875,
+      "mrr": 0.5411,
+      "ndcg@10": 0.6139,
+      "latence_ms_mediane": 63.4
+    }
+  },
+  "detail": {
+    "bm25": {
+      "q01": {
+        "rang_premier_passage_attendu": 3,
+        "top3": [
+          "cch-annexe-r172-4#0007",
+          "guide-re2020#0029",
+          "cch-annexe-r172-4#0065"
+        ]
+      },
+      "q02": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0133",
+          "cch-annexe-r172-4#0013",
+          "guide-re2020#0027"
+        ]
+      },
+      "q03": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "cch-annexe-r172-4#0072",
+          "cch-annexe-r172-4#0110",
+          "guide-re2020#0136"
+        ]
+      },
+      "q04": {
+        "rang_premier_passage_attendu": 3,
+        "top3": [
+          "guide-re2020#0130",
+          "guide-re2020#0101",
+          "cch-annexe-r172-4#0110"
+        ]
+      },
+      "q05": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0015",
+          "guide-re2020#0099",
+          "arrete-annexe-2#0205"
+        ]
+      },
+      "q06": {
+        "rang_premier_passage_attendu": 4,
+        "top3": [
+          "arrete-annexe-2#0206",
+          "arrete-annexe-2#0205",
+          "guide-re2020#0102"
+        ]
+      },
+      "q07": {
+        "rang_premier_passage_attendu": 8,
+        "top3": [
+          "guide-re2020#0072",
+          "arrete-annexe-2#0212",
+          "guide-re2020#0011"
+        ]
+      },
+      "q08": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0010",
+          "arrete-2021#0009",
+          "guide-re2020#0061"
+        ]
+      },
+      "q09": {
+        "rang_premier_passage_attendu": 4,
+        "top3": [
+          "guide-re2020#0115",
+          "guide-re2020#0143",
+          "guide-re2020#0116"
+        ]
+      },
+      "q10": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0024",
+          "guide-re2020#0143",
+          "guide-re2020#0033"
+        ]
+      },
+      "q11": {
+        "rang_premier_passage_attendu": 3,
+        "top3": [
+          "guide-re2020#0144",
+          "guide-re2020#0034",
+          "arrete-2021#0020"
+        ]
+      },
+      "q12": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0042",
+          "arrete-annexe-8#0000",
+          "arrete-annexe-2#0033"
+        ]
+      },
+      "q13": {
+        "rang_premier_passage_attendu": 4,
+        "top3": [
+          "arrete-annexe-2#0112",
+          "arrete-2021#0065",
+          "guide-re2020#0027"
+        ]
+      },
+      "q14": {
+        "rang_premier_passage_attendu": 8,
+        "top3": [
+          "arrete-2021#0032",
+          "arrete-annexe-1#0001",
+          "arrete-2021#0071"
+        ]
+      },
+      "q15": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0032",
+          "guide-re2020#0128",
+          "guide-re2020#0058"
+        ]
+      },
+      "q16": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0044",
+          "arrete-2021#0035",
+          "arrete-annexe-2#0214"
+        ]
+      },
+      "q17": {
+        "rang_premier_passage_attendu": 5,
+        "top3": [
+          "arrete-annexe-6#0003",
+          "guide-re2020#0105",
+          "arrete-annexe-2#0167"
+        ]
+      },
+      "q18": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "guide-re2020#0113",
+          "guide-re2020#0037",
+          "guide-re2020#0114"
+        ]
+      },
+      "q19": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "guide-re2020#0054",
+          "guide-re2020#0007",
+          "guide-re2020#0119"
+        ]
+      },
+      "q20": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "guide-re2020#0119",
+          "guide-re2020#0117",
+          "guide-re2020#0056"
+        ]
+      },
+      "q21": {
+        "rang_premier_passage_attendu": 3,
+        "top3": [
+          "cch-annexe-r172-4#0011",
+          "guide-re2020#0055",
+          "arrete-2021#0001"
+        ]
+      },
+      "q22": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0109",
+          "guide-re2020#0110",
+          "guide-re2020#0036"
+        ]
+      },
+      "q23": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0104",
+          "arrete-2021#0013",
+          "guide-re2020#0106"
+        ]
+      },
+      "q24": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0119",
+          "guide-re2020#0057",
+          "guide-re2020#0147"
+        ]
+      },
+      "q25": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0113",
+          "guide-re2020#0114",
+          "guide-re2020#0037"
+        ]
+      },
+      "q26": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "cch-annexe-r172-4#0014",
+          "cch-annexe-r172-4#0006",
+          "guide-re2020#0026"
+        ]
+      },
+      "q27": {
+        "rang_premier_passage_attendu": 4,
+        "top3": [
+          "guide-re2020#0028",
+          "guide-re2020#0136",
+          "cch-annexe-r172-4#0072"
+        ]
+      },
+      "q28": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0092",
+          "guide-re2020#0115",
+          "arrete-annexe-2#0217"
+        ]
+      },
+      "q29": {
+        "rang_premier_passage_attendu": 3,
+        "top3": [
+          "cch-annexe-r172-4#0015",
+          "cch-annexe-r172-4#0017",
+          "cch-annexe-r172-4#0014"
+        ]
+      },
+      "q30": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0079",
+          "guide-re2020#0004",
+          "guide-re2020#0127"
+        ]
+      },
+      "q31": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0020",
+          "guide-re2020#0144",
+          "guide-re2020#0012"
+        ]
+      },
+      "q32": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "cch-annexe-r172-4#0110",
+          "guide-re2020#0130",
+          "guide-re2020#0082"
+        ]
+      }
+    },
+    "vector": {
+      "q01": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "cch-annexe-r172-4#0073",
+          "cch-annexe-r172-4#0065",
+          "cch-annexe-r172-4#0077"
+        ]
+      },
+      "q02": {
+        "rang_premier_passage_attendu": 3,
+        "top3": [
+          "guide-re2020#0133",
+          "cch-annexe-r172-4#0019",
+          "cch-annexe-r172-4#0013"
+        ]
+      },
+      "q03": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "cch-annexe-r172-4#0072",
+          "guide-re2020#0028",
+          "cch-annexe-r172-4#0169"
+        ]
+      },
+      "q04": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "cch-annexe-r172-4#0116",
+          "cch-annexe-r172-4#0112",
+          "cch-annexe-r172-4#0147"
+        ]
+      },
+      "q05": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0099",
+          "guide-re2020#0015",
+          "guide-re2020#0101"
+        ]
+      },
+      "q06": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "cch-annexe-r172-4#0171",
+          "guide-re2020#0125",
+          "guide-re2020#0003"
+        ]
+      },
+      "q07": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0073",
+          "guide-re2020#0077",
+          "guide-re2020#0011"
+        ]
+      },
+      "q08": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0010",
+          "arrete-2021#0009",
+          "arrete-annexe-2#0038"
+        ]
+      },
+      "q09": {
+        "rang_premier_passage_attendu": 7,
+        "top3": [
+          "guide-re2020#0034",
+          "arrete-2021#0020",
+          "arrete-2021#0021"
+        ]
+      },
+      "q10": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0024",
+          "cch-annexe-r172-4#0079",
+          "cch-annexe-r172-4#0085"
+        ]
+      },
+      "q11": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0034",
+          "arrete-2021#0020",
+          "arrete-2021#0021"
+        ]
+      },
+      "q12": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "arrete-annexe-8#0000",
+          "arrete-2021#0049",
+          "guide-re2020#0034"
+        ]
+      },
+      "q13": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0030",
+          "arrete-annexe-2#0061",
+          "arrete-annexe-2#0087"
+        ]
+      },
+      "q14": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0033",
+          "arrete-annexe-1#0000",
+          "arrete-annexe-2#0037"
+        ]
+      },
+      "q15": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0032",
+          "guide-re2020#0079",
+          "arrete-2021#0030"
+        ]
+      },
+      "q16": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0035",
+          "arrete-annexe-2#0004",
+          "guide-re2020#0008"
+        ]
+      },
+      "q17": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "arrete-annexe-6#0003",
+          "guide-re2020#0105",
+          "guide-re2020#0109"
+        ]
+      },
+      "q18": {
+        "rang_premier_passage_attendu": 8,
+        "top3": [
+          "guide-re2020#0035",
+          "guide-re2020#0118",
+          "guide-re2020#0108"
+        ]
+      },
+      "q19": {
+        "rang_premier_passage_attendu": 10,
+        "top3": [
+          "guide-re2020#0125",
+          "guide-re2020#0077",
+          "guide-re2020#0006"
+        ]
+      },
+      "q20": {
+        "rang_premier_passage_attendu": 9,
+        "top3": [
+          "guide-re2020#0117",
+          "guide-re2020#0110",
+          "guide-re2020#0002"
+        ]
+      },
+      "q21": {
+        "rang_premier_passage_attendu": 3,
+        "top3": [
+          "cch-annexe-r172-4#0011",
+          "arrete-annexe-1#0007",
+          "arrete-2021#0001"
+        ]
+      },
+      "q22": {
+        "rang_premier_passage_attendu": 4,
+        "top3": [
+          "guide-re2020#0109",
+          "guide-re2020#0077",
+          "arrete-2021#0053"
+        ]
+      },
+      "q23": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0013",
+          "guide-re2020#0105",
+          "guide-re2020#0106"
+        ]
+      },
+      "q24": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "arrete-annexe-2#0074",
+          "guide-re2020#0076",
+          "guide-re2020#0119"
+        ]
+      },
+      "q25": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "arrete-annexe-2#0229",
+          "arrete-annexe-2#0227",
+          "arrete-annexe-2#0228"
+        ]
+      },
+      "q26": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "cch-annexe-r172-4#0014",
+          "guide-re2020#0134",
+          "cch-annexe-r172-4#0006"
+        ]
+      },
+      "q27": {
+        "rang_premier_passage_attendu": 8,
+        "top3": [
+          "cch-annexe-r172-4#0072",
+          "guide-re2020#0028",
+          "guide-re2020#0136"
+        ]
+      },
+      "q28": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "arrete-annexe-2#0217",
+          "arrete-2021#0018",
+          "arrete-2021#0007"
+        ]
+      },
+      "q29": {
+        "rang_premier_passage_attendu": 6,
+        "top3": [
+          "cch-annexe-r172-4#0058",
+          "cch-annexe-r172-4#0044",
+          "cch-annexe-r172-4#0052"
+        ]
+      },
+      "q30": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0073",
+          "guide-re2020#0110",
+          "guide-re2020#0082"
+        ]
+      },
+      "q31": {
+        "rang_premier_passage_attendu": 3,
+        "top3": [
+          "arrete-annexe-1#0001",
+          "arrete-2021#0030",
+          "arrete-2021#0020"
+        ]
+      },
+      "q32": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "cch-annexe-r172-4#0116",
+          "cch-annexe-r172-4#0169",
+          "cch-annexe-r172-4#0066"
+        ]
+      }
+    },
+    "hybrid": {
+      "q01": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "cch-annexe-r172-4#0065",
+          "cch-annexe-r172-4#0073",
+          "guide-re2020#0028"
+        ]
+      },
+      "q02": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0133",
+          "cch-annexe-r172-4#0013",
+          "cch-annexe-r172-4#0019"
+        ]
+      },
+      "q03": {
+        "rang_premier_passage_attendu": 6,
+        "top3": [
+          "cch-annexe-r172-4#0072",
+          "guide-re2020#0028",
+          "cch-annexe-r172-4#0169"
+        ]
+      },
+      "q04": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "cch-annexe-r172-4#0112",
+          "cch-annexe-r172-4#0110",
+          "cch-annexe-r172-4#0116"
+        ]
+      },
+      "q05": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0015",
+          "guide-re2020#0099",
+          "guide-re2020#0102"
+        ]
+      },
+      "q06": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "cch-annexe-r172-4#0171",
+          "guide-re2020#0003",
+          "guide-re2020#0007"
+        ]
+      },
+      "q07": {
+        "rang_premier_passage_attendu": 6,
+        "top3": [
+          "guide-re2020#0072",
+          "guide-re2020#0073",
+          "guide-re2020#0011"
+        ]
+      },
+      "q08": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0010",
+          "arrete-2021#0009",
+          "guide-re2020#0004"
+        ]
+      },
+      "q09": {
+        "rang_premier_passage_attendu": 4,
+        "top3": [
+          "guide-re2020#0143",
+          "arrete-2021#0021",
+          "arrete-2021#0020"
+        ]
+      },
+      "q10": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0024",
+          "guide-re2020#0143",
+          "cch-annexe-r172-4#0004"
+        ]
+      },
+      "q11": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0034",
+          "arrete-2021#0020",
+          "guide-re2020#0144"
+        ]
+      },
+      "q12": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "arrete-annexe-8#0000",
+          "guide-re2020#0145",
+          "guide-re2020#0006"
+        ]
+      },
+      "q13": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0030",
+          "arrete-2021#0045",
+          "arrete-2021#0065"
+        ]
+      },
+      "q14": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0033",
+          "arrete-2021#0032",
+          "arrete-2021#0030"
+        ]
+      },
+      "q15": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0032",
+          "arrete-annexe-2#0023",
+          "guide-re2020#0128"
+        ]
+      },
+      "q16": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0035",
+          "guide-re2020#0008",
+          "arrete-annexe-2#0214"
+        ]
+      },
+      "q17": {
+        "rang_premier_passage_attendu": 5,
+        "top3": [
+          "arrete-annexe-6#0003",
+          "guide-re2020#0105",
+          "guide-re2020#0035"
+        ]
+      },
+      "q18": {
+        "rang_premier_passage_attendu": 4,
+        "top3": [
+          "guide-re2020#0035",
+          "guide-re2020#0108",
+          "guide-re2020#0114"
+        ]
+      },
+      "q19": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "guide-re2020#0054",
+          "guide-re2020#0002",
+          "guide-re2020#0007"
+        ]
+      },
+      "q20": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0117",
+          "guide-re2020#0119",
+          "guide-re2020#0110"
+        ]
+      },
+      "q21": {
+        "rang_premier_passage_attendu": 4,
+        "top3": [
+          "cch-annexe-r172-4#0011",
+          "arrete-annexe-1#0007",
+          "guide-re2020#0055"
+        ]
+      },
+      "q22": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "guide-re2020#0109",
+          "guide-re2020#0110",
+          "guide-re2020#0036"
+        ]
+      },
+      "q23": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0013",
+          "guide-re2020#0106",
+          "guide-re2020#0105"
+        ]
+      },
+      "q24": {
+        "rang_premier_passage_attendu": 3,
+        "top3": [
+          "guide-re2020#0119",
+          "arrete-annexe-2#0074",
+          "guide-re2020#0057"
+        ]
+      },
+      "q25": {
+        "rang_premier_passage_attendu": null,
+        "top3": [
+          "guide-re2020#0059",
+          "guide-re2020#0036",
+          "guide-re2020#0113"
+        ]
+      },
+      "q26": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "cch-annexe-r172-4#0014",
+          "cch-annexe-r172-4#0006",
+          "guide-re2020#0134"
+        ]
+      },
+      "q27": {
+        "rang_premier_passage_attendu": 4,
+        "top3": [
+          "guide-re2020#0028",
+          "cch-annexe-r172-4#0072",
+          "guide-re2020#0136"
+        ]
+      },
+      "q28": {
+        "rang_premier_passage_attendu": 8,
+        "top3": [
+          "arrete-annexe-2#0217",
+          "guide-re2020#0092",
+          "arrete-annexe-2#0219"
+        ]
+      },
+      "q29": {
+        "rang_premier_passage_attendu": 8,
+        "top3": [
+          "cch-annexe-r172-4#0044",
+          "cch-annexe-r172-4#0058",
+          "cch-annexe-r172-4#0052"
+        ]
+      },
+      "q30": {
+        "rang_premier_passage_attendu": 5,
+        "top3": [
+          "guide-re2020#0004",
+          "guide-re2020#0011",
+          "guide-re2020#0083"
+        ]
+      },
+      "q31": {
+        "rang_premier_passage_attendu": 1,
+        "top3": [
+          "arrete-2021#0020",
+          "guide-re2020#0143",
+          "guide-re2020#0033"
+        ]
+      },
+      "q32": {
+        "rang_premier_passage_attendu": 2,
+        "top3": [
+          "cch-annexe-r172-4#0116",
+          "cch-annexe-r172-4#0110",
+          "guide-re2020#0136"
+        ]
+      }
+    }
+  }
+}

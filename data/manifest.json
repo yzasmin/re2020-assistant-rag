@@ -1,0 +1,137 @@
+{
+  "date_telechargement": "2026-09-22",
+  "documents": [
+    {
+      "doc_id": "arrete-2021",
+      "titre": "Arrêté du 4 août 2021 (version consolidée)",
+      "url": "https://aida.ineris.fr/reglementation/arrete-040821-relatif-exigences-performance-energetique-environnementale",
+      "fichier": "arrete_4_aout_2021_consolide.html",
+      "licence": "Texte officiel (acte réglementaire publié au JORF), librement réutilisable ; version consolidée reproduite par AIDA (Ineris)",
+      "kind": "html",
+      "reference": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000043936431",
+      "octets": 137658,
+      "sha256": "d2c2caaea11eef0fd1e8e3943b8ea56aa744b8ca9c42eb0f95dfdd7529eaae46"
+    },
+    {
+      "doc_id": "cch-annexe-r172-4",
+      "titre": "Annexe à l'article R. 172-4 du CCH, chapitres I à III (version au 1er juillet 2026)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/chapitre1a3_annexe_r172-4_post-rivaton-i.pdf",
+      "fichier": "chapitre1a3_annexe_r172-4_post-rivaton-i.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 1246739,
+      "sha256": "0f0abcb8e1d2ba84f29ff0f0d8ed59e78dd5d286efde9144bf55395c74980245"
+    },
+    {
+      "doc_id": "arrete-annexe-1",
+      "titre": "Arrêté du 4 août 2021, annexe I (définitions)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/annexei_arrete_4_aout_2021.pdf",
+      "fichier": "annexei_arrete_4_aout_2021.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 399906,
+      "sha256": "0f9272eacbf71387cec624af9e14db99f2d634ea99ea7dafb1fddadacba83566"
+    },
+    {
+      "doc_id": "arrete-annexe-2",
+      "titre": "Arrêté du 4 août 2021, annexe II (règles générales de calcul)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/annexeii_arrete_4_aout_2021.pdf",
+      "fichier": "annexeii_arrete_4_aout_2021.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 2041938,
+      "sha256": "19939118afb989eb69c912cdb8d6d3b1172f996f10bf1dd71f21e1043a17902a"
+    },
+    {
+      "doc_id": "arrete-annexe-5",
+      "titre": "Arrêté du 4 août 2021, annexe V (autocontrôle et approbation)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/annexev_arrete_4_aout_2021.pdf",
+      "fichier": "annexev_arrete_4_aout_2021.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 277250,
+      "sha256": "9975361694f3039308481ee6683a48474de5ead84f41bf943a51e56b17082a48"
+    },
+    {
+      "doc_id": "arrete-annexe-6",
+      "titre": "Arrêté du 4 août 2021, annexe VI (contenu du RSEE)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/annexevi_arrete_4_aout_2021.pdf",
+      "fichier": "annexevi_arrete_4_aout_2021.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 267781,
+      "sha256": "2ee7b46c949bb00785c30707ccbaac087b85b4150bd5b3364dfbdbeae1bf5072"
+    },
+    {
+      "doc_id": "arrete-annexe-7",
+      "titre": "Arrêté du 4 août 2021, annexe VII (étanchéité à l'air)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/annexevii_arrete_4_aout_2021.pdf",
+      "fichier": "annexevii_arrete_4_aout_2021.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 351785,
+      "sha256": "e1042921385c496d9419106c4eb591948494da3b66dc26a8ac4614e1b2df43e8"
+    },
+    {
+      "doc_id": "arrete-annexe-8",
+      "titre": "Arrêté du 4 août 2021, annexe VIII (vérification de la ventilation)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/annexeviii_arrete_4_aout_2021.pdf",
+      "fichier": "annexeviii_arrete_4_aout_2021.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 108147,
+      "sha256": "00192b890e9b5f83eced69de097776008d3033933081d5a999cb3bf0c6fd4ecb"
+    },
+    {
+      "doc_id": "arrete-annexe-9",
+      "titre": "Arrêté du 4 août 2021, annexe IX (applications simplifiées)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/annexeix_arrete_4_aout_2021.pdf",
+      "fichier": "annexeix_arrete_4_aout_2021.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 232454,
+      "sha256": "6e6452ccbe2551d5ecca4742127a2b4a8e1d9b02e59dd0b2dd8e34140ae12d0f"
+    },
+    {
+      "doc_id": "arrete-annexe-10",
+      "titre": "Arrêté du 4 août 2021, annexe X (cas particuliers)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/annexex_arrete_4_aout_2021.pdf",
+      "fichier": "annexex_arrete_4_aout_2021.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 301856,
+      "sha256": "0113a3dac25d0567f38f52ef5fba39a6e32537b403f0774fe8489b9aab5f4db6"
+    },
+    {
+      "doc_id": "arrete-annexe-11",
+      "titre": "Arrêté du 4 août 2021, annexe XI (performances forfaitaires)",
+      "url": "https://rt-re-batiment.developpement-durable.gouv.fr/IMG/pdf/annexexi_arrete_4_aout_2021.pdf",
+      "fichier": "annexexi_arrete_4_aout_2021.pdf",
+      "licence": "Licence Ouverte / Etalab 2.0",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 254689,
+      "sha256": "d607db7ee20e97fda68085efd4bc739b4447c2a8abdc1041dc3c5fa4e7804bf2"
+    },
+    {
+      "doc_id": "guide-re2020",
+      "titre": "Guide RE 2020 du ministère (Cerema, janvier 2024)",
+      "url": "https://www.ecologie.gouv.fr/sites/default/files/documents/guide_re2020_version_janvier_2024.pdf",
+      "fichier": "guide_re2020_version_janvier_2024.pdf",
+      "licence": "Publication administrative, réutilisation libre (CRPA art. L. 321-1)",
+      "kind": "pdf",
+      "reference": "",
+      "octets": 3946569,
+      "sha256": "15c7e813f2ed44619206dbe3791443b0ac4c7787c7ddf1faa4784106c6a59cfe"
+    }
+  ]
+}
