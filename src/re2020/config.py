@@ -31,16 +31,13 @@ CHUNK_MAX_CHARS = 1700
 RRF_K = 60
 CANDIDATES_PER_RETRIEVER = 50
 
-# Modèles Anthropic (identifiants vérifiés dans la documentation du SDK, septembre 2026).
-AGENT_MODEL = os.environ.get("RE2020_AGENT_MODEL", "claude-haiku-4-5")
-JUDGE_MODEL = os.environ.get("RE2020_JUDGE_MODEL", "claude-sonnet-5")
-
-# Prix publics en dollars par million de jetons (entrée, sortie).
-PRICES_USD_PER_MTOK = {
-    "claude-haiku-4-5": (1.00, 5.00),
-    "claude-sonnet-5": (2.00, 10.00),
-    "claude-sonnet-4-6": (3.00, 15.00),
-    "claude-opus-5": (5.00, 25.00),
-}
-CACHE_WRITE_FACTOR = 1.25
-CACHE_READ_FACTOR = 0.10
+# Génération locale par Ollama : aucune clé, aucun appel sortant, coût nul.
+DEFAULT_OLLAMA_HOST = "http://localhost:11434"
+# Modèle retenu après mesure sur ce poste : un 3 milliards de paramètres pagine (3,6 jetons/s en
+# sortie), le 1,5 milliard quantifié tient en mémoire (218 jetons/s en lecture, 10,7 en sortie).
+DEFAULT_OLLAMA_MODEL = "qwen2.5:1.5b-instruct-q4_K_M"
+AGENT_NUM_PREDICT = 400      # plafond de jetons générés par tour, pour borner la latence sur processeur
+JUDGE_NUM_PREDICT = 400
+AGENT_NUM_CTX = 4096         # fenêtre de contexte : consigne, outils et cinq passages
+KEEP_ALIVE = "30m"           # garde le modèle chargé entre les questions (30 s de chargement évitées)
+PASSAGES_PAR_RECHERCHE = 5

@@ -1,32 +1,25 @@
-"""Évaluation de la génération : fidélité, exactitude, citations, refus, coût, latence.
+"""Évaluation de la génération : fidélité, exactitude, citations, refus, latence, mémoire.
 
-Cette évaluation appelle l'API Anthropic : elle exige ANTHROPIC_API_KEY (fichier .env ou variable
-d'environnement). Sans clé, la commande s'arrête sans rien écrire et sans produire de chiffre.
+Tout tourne en local sur Ollama : aucune clé, aucun appel sortant, coût nul. La contrepartie est la
+latence, mesurée et publiée telle quelle.
 """
 
 from __future__ import annotations
 
 import json
-import os
 import statistics
 import sys
 from collections import Counter
 from datetime import date
-
-from dotenv import load_dotenv
 
 from re2020 import config
 from re2020.agent import Agent, Trace
 from re2020.chunking import load_chunks
 from re2020.evaluation import Question, load_questions
 from re2020.judge import Judge
+from re2020.ollama_client import OllamaClient, OllamaError, modele_par_defaut
 from re2020.retrieval import Retriever
 from re2020.sources import SOURCES_BY_ID
-
-
-def cle_presente() -> bool:
-    load_dotenv(config.ROOT / ".env")
-    return bool(os.environ.get("ANTHROPIC_API_KEY"))
 
 
 def passages_cites(trace: Trace, par_id: dict) -> list[str]:
@@ -48,20 +41,28 @@ def refus_correct(question: Question, trace: Trace) -> bool:
     return trace.refus if question.hors_perimetre else not trace.refus
 
 
-def run() -> dict:
+def run(limite: int | None = None) -> dict:
     chunks = load_chunks()
     par_id = {c.chunk_id: c for c in chunks}
-    questions = load_questions()
-    agent = Agent(Retriever(chunks))
-    juge = Judge()
+    questions = load_questions()[:limite]
+    client = OllamaClient()
+    modele = modele_par_defaut()
+    agent = Agent(Retriever(chunks), client=client, model=modele)
+    juge = Judge(client=client, model=modele)
 
-    traces, verdicts = [], []
+    traces, verdicts, memoires = [], [], []
     for i, q in enumerate(questions, start=1):
         trace = agent.answer(q.question)
         verdict = None
         if not trace.refus and trace.reponse:
-            verdict = juge.evaluer(q.question, trace.reponse, passages_cites(trace, par_id), q.reponse_reference)
+            try:
+                verdict = juge.evaluer(q.question, trace.reponse, passages_cites(trace, par_id),
+                                       q.reponse_reference)
+            except (OllamaError, ValueError) as exc:
+                juge.echecs += 1
+                verdict = {"erreur": str(exc)[:200], "fidelite": None, "exactitude": None}
         bonnes, total = citations_valides(trace, par_id)
+        memoires.append(client.empreinte_memoire())
         traces.append({
             "id": q.id, "type": q.type, "hors_perimetre": q.hors_perimetre,
             **trace.to_dict(),
@@ -70,34 +71,46 @@ def run() -> dict:
             "verdict_juge": verdict,
         })
         verdicts.append(verdict)
-        print(f"[{i}/{len(questions)}] {q.id} refus={trace.refus} coût={trace.cout_usd:.4f} $", flush=True)
+        print(f"[{i}/{len(questions)}] {q.id} refus={trace.refus} {trace.latence_s} s "
+              f"citations={bonnes}/{total}", flush=True)
 
-    fidelites = [v["fidelite"] for v in verdicts if v and v["fidelite"] is not None]
-    exactitudes = Counter(v["exactitude"] for v in verdicts if v)
+    fidelites = [v["fidelite"] for v in verdicts if v and v.get("fidelite") is not None]
+    exactitudes = Counter(v["exactitude"] for v in verdicts if v and v.get("exactitude"))
     bonnes = sum(t["citations_valides"] for t in traces)
     total_citations = sum(t["citations_total"] for t in traces)
     hors = [t for t in traces if t["hors_perimetre"]]
     dans = [t for t in traces if not t["hors_perimetre"]]
-    cout_agent = sum(t["cout_usd"] for t in traces)
+    latences = sorted(t["latence_s"] for t in traces)
+    jugees = len([v for v in verdicts if v and v.get("exactitude")])
 
     metriques = {
         "date": date.today().isoformat(),
-        "modele_agent": agent.model,
-        "modele_juge": juge.model,
+        "modele": client.details_modele(modele),
+        "juge": f"{modele} (même modèle local que l'agent, voir les limites)",
         "questions": len(questions),
         "fidelite_moyenne": round(statistics.fmean(fidelites), 4) if fidelites else None,
         "reponses_jugees": len(fidelites),
         "exactitude": {k: exactitudes.get(k, 0) for k in ("correcte", "partielle", "incorrecte")},
+        "part_correcte_ou_partielle": round(
+            (exactitudes.get("correcte", 0) + exactitudes.get("partielle", 0)) / jugees, 4) if jugees else None,
         "taux_citations_valides": round(bonnes / total_citations, 4) if total_citations else None,
         "citations_total": total_citations,
-        "taux_refus_correct_hors_perimetre": round(sum(t["refus_correct"] for t in hors) / len(hors), 4) if hors else None,
-        "taux_reponse_dans_perimetre": round(sum(t["refus_correct"] for t in dans) / len(dans), 4) if dans else None,
-        "cout_total_usd": round(cout_agent + juge.cout_total_usd, 4),
-        "cout_agent_usd": round(cout_agent, 4),
-        "cout_juge_usd": round(juge.cout_total_usd, 4),
-        "cout_moyen_par_question_usd": round((cout_agent + juge.cout_total_usd) / len(questions), 5),
-        "latence_mediane_s": round(statistics.median(t["latence_s"] for t in traces), 2),
+        "reponses_sans_citation": sum(1 for t in dans if t["citations_total"] == 0),
+        "taux_refus_correct_hors_perimetre": round(
+            sum(t["refus_correct"] for t in hors) / len(hors), 4) if hors else None,
+        "taux_reponse_dans_perimetre": round(
+            sum(t["refus_correct"] for t in dans) / len(dans), 4) if dans else None,
+        "latence_mediane_s": round(statistics.median(latences), 1),
+        "latence_moyenne_s": round(statistics.fmean(latences), 1),
+        "latence_p90_s": round(latences[int(0.9 * (len(latences) - 1))], 1),
+        "duree_totale_min": round(sum(latences) / 60, 1),
+        "jetons_entree_moyens": round(statistics.fmean(t["jetons"].get("entree", 0) for t in traces)),
+        "jetons_sortie_moyens": round(statistics.fmean(t["jetons"].get("sortie", 0) for t in traces)),
         "appels_outils_moyens": round(statistics.fmean(len(t["appels_outils"]) for t in traces), 2),
+        "memoire_modele_max_mo": round(max((m["octets_resident"] for m in memoires), default=0) / 1e6, 1),
+        "memoire_gpu_max_mo": round(max((m["octets_sur_gpu"] for m in memoires), default=0) / 1e6, 1),
+        "verdicts_juge_illisibles": juge.echecs,
+        "cout_usd": 0.0,
     }
 
     config.RESULTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -109,64 +122,17 @@ def run() -> dict:
     return metriques
 
 
-JETONS_PAR_CARACTERE = 0.25  # approximation usuelle en français, faute de pouvoir appeler count_tokens
-
-
-def estimation_cout(k: int = 5) -> dict:
-    """Estime le coût de l'évaluation complète sans appeler l'API.
-
-    Les tailles sont mesurées sur les vrais prompts et les vrais passages ; seule la conversion
-    caractères vers jetons est approchée. C'est une estimation, pas une mesure.
-    """
-    import json as _json
-
-    from re2020.agent import SYSTEM_PROMPT, TOOLS
-    from re2020.judge import CONSIGNE
-
-    chunks = load_chunks()
-    questions = load_questions()
-    taille_passage = statistics.fmean(len(c.text) for c in chunks)
-    def jetons(n: float) -> float:
-        return n * JETONS_PAR_CARACTERE
-
-
-    socle = jetons(len(SYSTEM_PROMPT) + len(_json.dumps(TOOLS, ensure_ascii=False)))
-    passages = jetons(taille_passage * k)
-    question_moyenne = jetons(statistics.fmean(len(q.question) for q in questions))
-    sortie_agent = 400  # réponse citée courte, ordre de grandeur
-
-    # Deux appels par question : recherche, puis réponse avec les passages.
-    entree_agent = (socle + question_moyenne) + (socle + question_moyenne + passages + sortie_agent)
-    prix_agent = config.PRICES_USD_PER_MTOK[config.AGENT_MODEL]
-    cout_agent = (entree_agent * prix_agent[0] + sortie_agent * prix_agent[1]) / 1e6
-
-    jugees = sum(1 for q in questions if not q.hors_perimetre)
-    entree_juge = jetons(len(CONSIGNE)) + question_moyenne + jetons(600) + passages * 0.6 + sortie_agent
-    sortie_juge = 600
-    prix_juge = config.PRICES_USD_PER_MTOK[config.JUDGE_MODEL]
-    cout_juge = (entree_juge * prix_juge[0] + sortie_juge * prix_juge[1]) / 1e6
-
-    total = cout_agent * len(questions) + cout_juge * jugees
-    return {
-        "hypotheses": f"{JETONS_PAR_CARACTERE} jeton par caractère, 2 appels d'agent par question, "
-                      f"{k} passages par recherche, {sortie_agent} jetons de réponse",
-        "questions": len(questions),
-        "reponses_jugees_estimees": jugees,
-        "cout_agent_usd": round(cout_agent * len(questions), 3),
-        "cout_juge_usd": round(cout_juge * jugees, 3),
-        "cout_total_estime_usd": round(total, 3),
-    }
-
-
-def main() -> None:
-    if not cle_presente():
-        print(
-            "ANTHROPIC_API_KEY absente : l'évaluation de la génération ne peut pas être exécutée.\n"
-            "Copier .env.example en .env et y placer la clé, puis relancer cette commande.",
-            file=sys.stderr,
-        )
+def main(limite: int | None = None) -> None:
+    client = OllamaClient()
+    if not client.disponible():
+        print("Serveur Ollama injoignable sur http://localhost:11434 : lancer `ollama serve`.",
+              file=sys.stderr)
         raise SystemExit(1)
-    metriques = run()
+    modele = modele_par_defaut()
+    if modele not in client.modeles():
+        print(f"Modèle {modele} absent : lancer `ollama pull {modele}`.", file=sys.stderr)
+        raise SystemExit(1)
+    metriques = run(limite)
     print(json.dumps(metriques, ensure_ascii=False, indent=2))
 
 

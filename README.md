@@ -1,9 +1,12 @@
-# Assistant RE2020 : RAG hybride et agent outillé
+# Assistant RE2020 : RAG hybride et agent outillé, 100 % local
 
 Assistant de questions-réponses sur la réglementation environnementale RE2020, construit sur les textes
-officiels publiés par l'État. Recherche hybride (BM25 et embeddings), réponses obligatoirement citées,
-refus quand les sources ne couvrent pas la question, et un jeu d'évaluation de 37 questions avec réponses
-de référence vérifiées dans les textes.
+officiels publiés par l'État. Recherche hybride (BM25 et embeddings), génération par un modèle ouvert
+exécuté en local avec Ollama, réponses citées, refus quand les sources ne couvrent pas la question, et un
+jeu d'évaluation de 37 questions avec réponses de référence vérifiées dans les textes.
+
+Aucune clé API, aucun appel sortant, coût d'exécution nul. La contrepartie, mesurée et publiée telle
+quelle, est la latence et la qualité d'un petit modèle contraint par 8 Go de RAM.
 
 ## Problème
 
@@ -26,11 +29,11 @@ flowchart TD
     B --> D[Index vectoriel<br/>multilingual-e5-small, Qdrant local]
     C --> E[Fusion RRF]
     D --> E
-    E --> F[Outil rechercher_reglementation]
-    G[Outil calculer<br/>arbre syntaxique, sans eval] --> H
-    F --> H[Agent Claude<br/>boucle d'appel d'outils]
-    H --> I[Réponse citée ou refus<br/>+ coût et latence]
-    I --> J[Évaluation génération<br/>juge LLM, en attente de la clé]
+    E --> F[Recherche initiale déterministe<br/>5 passages joints à la question]
+    F --> H[Modèle local Ollama<br/>qwen2.5 1,5 Md, Q4_K_M]
+    G[Outils : rechercher_reglementation<br/>et calculer, arbre syntaxique sans eval] --> H
+    H --> I[Réponse citée ou refus<br/>+ latence et jetons]
+    I --> J[Juge local, même modèle<br/>fidélité et exactitude]
     E --> K[Évaluation récupération<br/>recall, MRR, nDCG]
 ```
 
@@ -60,68 +63,46 @@ moteurs dans les dix premiers résultats (seuil DH d'une maison individuelle, v�
 ventilation, liste des indicateurs attestés) : leurs passages attendus sont des tableaux ou des
 paragraphes dont le vocabulaire ne recoupe presque pas celui de la question.
 
-## Génération : en attente de la clé API
+## Génération locale
 
-Le code de l'agent, du juge et de l'évaluation de génération est écrit et testé, mais **aucune métrique
-de génération n'a été produite**. Une clé a bien été déposée dans `.env` le 22/09/2026, mais elle n'est
-rattachée à aucun espace de travail : l'API répond alors
-`This API key is not scoped to a workspace, so this request must include the anthropic-workspace-id header`
-et refuse chaque appel. Le client ajoute cet en-tête dès que `ANTHROPIC_WORKSPACE_ID` est renseigné dans
-`.env` ; il manque seulement cet identifiant, visible dans la console Anthropic. Aucun chiffre de
-fidélité, d'exactitude ou de coût réel n'est publié ici, et rien n'a été simulé.
-
-Ce qui est prêt à tourner en une commande dès que la clé est posée dans `.env` :
-
-```bash
-uv run python -m re2020 eval-generation
-```
-
-La commande écrit `results/generation_metrics.json` et `results/generation_traces.jsonl` avec :
-
-- **fidélité** : part des affirmations de la réponse soutenues par les passages cités, jugée par un
-  second modèle plus capable (`claude-sonnet-5`) à partir des seuls passages fournis ;
-- **exactitude** : comparaison à la réponse de référence, classée correcte, partielle ou incorrecte ;
-- **taux de citations valides** : part des citations pointant vers un document indexé et réellement
-  consulté pendant la réponse ;
-- **taux de refus correct** : refus sur les 5 questions hors périmètre, réponse sur les 32 autres ;
-- **coût et latence** réels, calculés à partir de `usage` et des prix publics par million de jetons.
-
-Coût estimé de l'évaluation complète : **environ 0,48 $** (0,19 $ pour l'agent en `claude-haiku-4-5`,
-0,29 $ pour le juge en `claude-sonnet-5`). C'est une estimation calculée sur les vrais prompts avec une
-conversion approchée de 0,25 jeton par caractère, reproductible par
-`uv run python -m re2020 estimer-cout` ; ce n'est pas une mesure.
+<!-- RESULTATS_GENERATION -->
 
 ## Reproduire
 
-Depuis un clone vierge, avec [uv](https://docs.astral.sh/uv/) installé :
+Depuis un clone vierge, avec [uv](https://docs.astral.sh/uv/) et
+[Ollama](https://ollama.com/download) installés :
 
 ```bash
 git clone https://github.com/yzasmin/re2020-assistant-rag.git
 cd re2020-assistant-rag
 uv sync
 
+ollama pull qwen2.5:1.5b-instruct-q4_K_M   # 986 Mo
+
 uv run python -m re2020 telecharger     # 12 documents officiels dans data/raw (environ 9 Mo)
 uv run python -m re2020 indexer         # 694 passages + index vectoriel (environ 10 min sur CPU)
 uv run python -m re2020 eval-retrieval  # results/retrieval_metrics.json + le graphique
-uv run pytest                           # 47 tests, aucun appel réseau
+uv run python -m re2020 eval-generation # results/generation_metrics.json + les traces
+uv run pytest                           # 51 tests, aucun appel réseau
 ```
 
-Recherche seule, sans appel à un modèle :
+Recherche seule, sans modèle de langage :
 
 ```bash
 uv run python -m re2020 chercher "seuil carbone maison individuelle 2025" -k 5
 uv run python -m re2020 chercher "perméabilité à l'air" --mode bm25
 ```
 
-Interroger l'agent (nécessite `.env` avec `ANTHROPIC_API_KEY`) :
+Interroger l'assistant :
 
 ```bash
 uv run python -m re2020 ask "Quel est le seuil Icconstruction d'une maison individuelle en 2025 ?"
 uv run python -m re2020 ask "Quelle perméabilité à l'air pour un logement collectif ?" --json
 ```
 
-L'indexation tient dans moins de 500 Mo de mémoire : embeddings ONNX quantifiés int8 calculés par lots
-de 16, index Qdrant en mode local sur disque (2,8 Mo), aucun serveur à lancer.
+Le nom du modèle est configurable dans `.env` (`OLLAMA_MODEL`), tout comme l'adresse du serveur
+(`OLLAMA_HOST`). L'indexation tient dans moins de 500 Mo de mémoire : embeddings ONNX quantifiés int8
+calculés par lots de 16, index Qdrant en mode local sur disque (2,8 Mo), aucun service distant.
 
 ## Structure
 
@@ -132,15 +113,16 @@ src/re2020/
   text.py           normalisation française pour BM25 (accents, élisions, mots vides, racinisation)
   retrieval.py      index BM25, index vectoriel Qdrant, fusion RRF
   calculator.py     évaluation arithmétique sûre par arbre syntaxique, sans eval
-  agent.py          boucle d'appel d'outils sur l'API Messages, citations, refus, coût
-  judge.py          juge LLM (fidélité et exactitude) en sortie structurée JSON
+  ollama_client.py  client HTTP local (chat, modèles chargés, mémoire occupée)
+  agent.py          recherche initiale, boucle d'appel d'outils, citations, refus, jetons
+  judge.py          juge local (fidélité et exactitude) en sortie contrainte par schéma JSON
   evaluation.py     jeu de questions et métriques recall@k, MRR, nDCG@k
   eval_retrieval.py mesure de la récupération et graphique comparatif
-  eval_generation.py mesure de la génération et estimation de coût
+  eval_generation.py mesure de la génération (fidélité, citations, refus, latence, mémoire)
   __main__.py       interface en ligne de commande
 eval/questions.jsonl  37 questions avec réponses de référence et phrases attendues
-results/              métriques réelles et graphique
-tests/                47 tests, client Anthropic simulé pour l'agent et le juge
+results/              métriques réelles, traces de génération et graphiques
+tests/                51 tests, client Ollama simulé pour l'agent et le juge
 data/manifest.json    empreintes SHA-256 et date de téléchargement des documents
 ```
 
@@ -164,14 +146,17 @@ ceux publiés au Journal officiel (décret n° 2021-1004 du 29 juillet 2021, JOR
 version consolidée de l'arrêté est donc reprise de la base AIDA de l'Ineris, qui reproduit le texte
 officiel, et chaque passage cite l'URL Légifrance de référence.
 
+Modèles utilisés : `intfloat/multilingual-e5-small` pour les embeddings (licence MIT, export ONNX
+quantifié publié par Xenova) et `qwen2.5:1.5b-instruct-q4_K_M` pour la génération (licence Apache 2.0),
+tous deux exécutés en local.
+
 ## Limites
 
-- **La génération n'est pas évaluée.** Fidélité, exactitude, coût et latence réels restent à mesurer,
-  faute de clé API. Tant que ce n'est pas fait, rien ne prouve que l'agent respecte ses consignes de
-  citation et de refus en conditions réelles : seule la mécanique est testée, avec un client simulé.
+<!-- LIMITES_GENERATION -->
+
 - **Rappel@1 de 0,36.** Un tiers seulement des questions trouve la bonne source en premier résultat.
-  L'agent compense en recevant cinq passages et en pouvant relancer une recherche, mais un reclassement
-  (cross-encoder) ou un découpage plus fin des grands tableaux amélioreraient nettement ce chiffre.
+  L'assistant reçoit cinq passages, ce qui porte le rappel à 0,75, mais un reclassement (cross-encoder)
+  ou un découpage plus fin des grands tableaux amélioreraient nettement ce chiffre.
 - **Les tableaux réglementaires passent mal en texte.** Les seuils vivent dans des tableaux à plusieurs
   entrées (usage, année, zone climatique) que l'extraction PDF aplatit en suite de nombres. Un passage
   peut donc contenir le bon chiffre sans que sa condition d'application soit lisible.
@@ -189,5 +174,5 @@ officiel, et chaque passage cite l'URL Légifrance de référence.
 ## Crédits
 
 Projet réalisé par Yasmina Saoud. Textes réglementaires : ministère de la Transition écologique,
-Cerema, Ineris (AIDA). Modèle d'embeddings : `intfloat/multilingual-e5-small` (licence MIT), export ONNX
-quantifié publié par Xenova.
+Cerema, Ineris (AIDA). Modèles ouverts : `intfloat/multilingual-e5-small` (MIT) et Qwen2.5 (Apache 2.0),
+servis par Ollama.

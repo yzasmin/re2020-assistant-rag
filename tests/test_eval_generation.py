@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-from types import SimpleNamespace
 
 import pytest
 
@@ -12,6 +11,7 @@ from re2020.chunking import Chunk
 from re2020.eval_generation import citations_valides, passages_cites, refus_correct
 from re2020.evaluation import Question, load_questions
 from re2020.judge import Judge
+from re2020.ollama_client import ChatResponse, OllamaError
 
 CHUNKS = {
     "arrete-2021#0": Chunk("arrete-2021#0", "arrete-2021", "Arrêté", "Article 19", None, None, "u", "0,60 m3/(h.m2)"),
@@ -58,40 +58,54 @@ def test_refus_correct_selon_le_perimetre():
 
 
 class FauxClientJuge:
-    def __init__(self, verdict):
-        payload = json.dumps(verdict, ensure_ascii=False)
-        usage = SimpleNamespace(model_dump=lambda: {"input_tokens": 1000, "output_tokens": 200})
-        self.message = SimpleNamespace(content=[SimpleNamespace(type="text", text=payload)], usage=usage)
+    """Rejoue un verdict JSON, comme le ferait Ollama avec une sortie contrainte par schéma."""
+
+    def __init__(self, verdict, texte=None):
+        self.texte = texte if texte is not None else json.dumps(verdict, ensure_ascii=False)
         self.requetes = []
-        self.messages = SimpleNamespace(create=self._create)
 
-    def _create(self, **kwargs):
-        self.requetes.append(kwargs)
-        return self.message
+    def chat(self, model, messages, tools=None, format=None, options=None):
+        self.requetes.append({"model": model, "messages": messages, "format": format, "options": options})
+        return ChatResponse(content=self.texte, duree_s=12.0, jetons_entree=900, jetons_sortie=150)
 
 
-def test_juge_calcule_la_fidelite_et_compte_le_cout():
-    verdict_simule = {
-        "affirmations": [
-            {"affirmation": "0,60 m3/(h.m2)", "soutenue": True, "justification": "passage 1"},
-            {"affirmation": "obligation depuis 2020", "soutenue": False, "justification": "absent"},
-        ],
-        "exactitude": "partielle",
-        "commentaire": "un chiffre non soutenu",
-    }
-    client = FauxClientJuge(verdict_simule)
-    juge = Judge(client=client, model="claude-sonnet-5")
+VERDICT = {
+    "affirmations": [
+        {"affirmation": "0,60 m3/(h.m2)", "soutenue": True},
+        {"affirmation": "obligation depuis 2020", "soutenue": False},
+    ],
+    "exactitude": "partielle",
+    "commentaire": "un chiffre non soutenu",
+}
+
+
+def test_juge_calcule_la_fidelite_et_contraint_la_sortie():
+    client = FauxClientJuge(VERDICT)
+    juge = Judge(client=client, model="qwen2.5:1.5b-instruct-q4_K_M")
     verdict = juge.evaluer("question", "réponse", ["[arrete-2021, Article 19] 0,60"], "référence")
     assert verdict["fidelite"] == 0.5
     assert verdict["exactitude"] == "partielle"
-    # claude-sonnet-5 : 2 $ / Mjetons en entrée, 10 $ en sortie
-    assert juge.cout_total_usd == pytest.approx(1000 / 1e6 * 2 + 200 / 1e6 * 10)
-    assert client.requetes[0]["output_config"]["format"]["type"] == "json_schema"
+    assert verdict["latence_s"] == 12.0
+    assert client.requetes[0]["format"]["properties"]["exactitude"]["enum"] == [
+        "correcte", "partielle", "incorrecte"]
 
 
 def test_juge_sans_affirmation_ne_fabrique_pas_de_score():
     juge = Judge(client=FauxClientJuge({"affirmations": [], "exactitude": "correcte", "commentaire": ""}))
     assert juge.evaluer("q", "r", [], "ref")["fidelite"] is None
+
+
+def test_verdict_hors_nomenclature_ramene_a_none():
+    juge = Judge(client=FauxClientJuge({"affirmations": [{"affirmation": "a", "soutenue": True}],
+                                        "exactitude": "excellente", "commentaire": ""}))
+    verdict = juge.evaluer("q", "r", [], "ref")
+    assert verdict["exactitude"] is None and verdict["fidelite"] == 1.0
+
+
+def test_verdict_illisible_leve_une_erreur_exploitable():
+    juge = Judge(client=FauxClientJuge(None, texte="je ne sais pas"))
+    with pytest.raises(OllamaError):
+        juge.evaluer("q", "r", [], "ref")
 
 
 def test_jeu_de_questions_complet_et_coherent():
