@@ -1,5 +1,5 @@
 {
-  "date": "2026-09-22",
+  "date": "2026-09-23",
   "passages_indexes": 694,
   "questions_evaluees": 32,
   "questions_hors_perimetre": 5,
@@ -13,7 +13,7 @@
       "recall@10": 0.8281,
       "mrr": 0.4724,
       "ndcg@10": 0.552,
-      "latence_ms_mediane": 7.3
+      "latence_ms_mediane": 2.9
     },
     "vector": {
       "recall@1": 0.2812,
@@ -22,7 +22,7 @@
       "recall@10": 0.625,
       "mrr": 0.3756,
       "ndcg@10": 0.4304,
-      "latence_ms_mediane": 43.1
+      "latence_ms_mediane": 23.5
     },
     "hybrid": {
       "recall@1": 0.3594,
@@ -31,7 +31,7 @@
       "recall@10": 0.875,
       "mrr": 0.5411,
       "ndcg@10": 0.6139,
-      "latence_ms_mediane": 63.4
+      "latence_ms_mediane": 26.5
     }
   },
   "detail": {

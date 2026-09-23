@@ -46,9 +46,15 @@ Source des chiffres : `results/retrieval_metrics.json`.
 
 | Moteur                     | Rappel@1  | Rappel@3  | Rappel@5 | Rappel@10 | MRR       | nDCG@10   | Latence médiane |
 | -------------------------- | --------- | --------- | -------- | --------- | --------- | --------- | --------------- |
-| BM25 seul                  | 0,266     | **0,594** | 0,750    | 0,828     | 0,472     | 0,552     | 7 ms            |
-| Vectoriel seul (e5-small)  | 0,281     | 0,422     | 0,453    | 0,625     | 0,376     | 0,430     | 43 ms           |
-| Hybride (RRF, k = 60)      | **0,359** | 0,578     | 0,750    | **0,875** | **0,541** | **0,614** | 63 ms           |
+| BM25 seul                  | 0,266     | **0,594** | 0,750    | 0,828     | 0,472     | 0,552     | 2,9 ms          |
+| Vectoriel seul (e5-small)  | 0,281     | 0,422     | 0,453    | 0,625     | 0,376     | 0,430     | 23,5 ms         |
+| Hybride (RRF, k = 60)      | **0,359** | 0,578     | 0,750    | **0,875** | **0,541** | **0,614** | 26,5 ms         |
+
+Les colonnes de qualité sont déterministes : elles se reproduisent à l'identique d'une exécution à
+l'autre. La latence, elle, dépend de la charge du poste : sur quatre exécutions successives du
+23/09/2026, la médiane va de 2,9 à 4,2 ms pour BM25, de 23,1 à 26,3 ms pour le vectoriel et de 26,5 à
+30,4 ms pour l'hybride, et une exécution du 22/09 sur un poste plus chargé donnait 7,3 / 43,1 / 63,4 ms.
+Le tableau reprend l'exécution enregistrée dans `results/retrieval_metrics.json`, pas une moyenne.
 
 ![Comparaison des moteurs de récupération](results/retrieval_comparison.png)
 
