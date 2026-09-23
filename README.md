@@ -1,5 +1,7 @@
 # Assistant RE2020 : RAG hybride et agent outillé, 100 % local
 
+**Fiche détaillée du projet : <https://yzasmin.github.io/projets/agent-ia-llm/>** (portfolio de Yasmina Saoud)
+
 Assistant de questions-réponses sur la réglementation environnementale RE2020, construit sur les textes
 officiels publiés par l'État. Recherche hybride (BM25 et embeddings), génération par un modèle ouvert
 exécuté en local avec Ollama, réponses citées, refus quand les sources ne couvrent pas la question, et un
